@@ -12,6 +12,7 @@ public class Company {
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String name;
+    private int size;
     private String addressLine1;
     private String addressLine2;
     private String city;
@@ -20,7 +21,6 @@ public class Company {
     private String field;
     private String phoneNumber1;
     private String phoneNumber2;
-    private int size;
     private String website;
 
     @OneToOne(mappedBy = "company")

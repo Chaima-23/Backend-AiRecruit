@@ -20,7 +20,6 @@ public class DefaultUserService implements UserService {
     }
 
     public User saveUser(User user) {
-        // keycloak admin
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }

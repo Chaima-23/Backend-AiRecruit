@@ -1,26 +1,24 @@
-package com.example.backendpfe.models.idm;
-import jakarta.persistence.*;
-import lombok.*;
+package com.example.backendpfe.dto;
+import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
-@Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-
-public class Candidate extends User {
+public class CandidateDTO {
     private LocalDate dateOfBirth;
     private String gender;
     private String country;
     private String city;
     private String address;
     private String phoneNumber;
+
     private String diploma;
     private String specialization;
     private int yearsOfExperience;
     private String technicalSkills;
     private String softSkills;
-    private String cvFilePath;
-    private String coverLetterFilePath;
+
+    private MultipartFile cvFile;
+    private MultipartFile coverLetterFile;
 }
