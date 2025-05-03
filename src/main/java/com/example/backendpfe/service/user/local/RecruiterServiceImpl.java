@@ -1,12 +1,13 @@
-package com.example.backendpfe.service.user;
+package com.example.backendpfe.service.user.local;
 
 import com.example.backendpfe.dto.RecruiterDTO;
 import com.example.backendpfe.dto.UserDTO;
 import com.example.backendpfe.models.idm.Recruiter;
 import com.example.backendpfe.models.profile.Company;
-import com.example.backendpfe.service.CompanyRepository;
-import com.example.backendpfe.repository.user.RecruiterRepository;
+import com.example.backendpfe.service.user.RecruiterService;
+import com.example.backendpfe.service.user.KeycloakAdminService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -60,5 +61,11 @@ public class RecruiterServiceImpl implements RecruiterService {
         companyRepository.save(company);
 
         return recruiter;
+    }
+    @Override
+    public Recruiter getCurrentRecruiter() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return recruiterRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Recruiter not found"));
     }
 }

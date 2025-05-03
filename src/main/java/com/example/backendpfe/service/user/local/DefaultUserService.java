@@ -1,7 +1,7 @@
-package com.example.backendpfe.service.user;
+package com.example.backendpfe.service.user.local;
 
 import com.example.backendpfe.models.idm.User;
-import com.example.backendpfe.repository.UserRepository;
+import com.example.backendpfe.service.user.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

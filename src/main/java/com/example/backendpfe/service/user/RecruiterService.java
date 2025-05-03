@@ -6,4 +6,5 @@ import com.example.backendpfe.models.idm.Recruiter;
 
 public interface RecruiterService {
     Recruiter registerRecruiter(RecruiterDTO recruiterDTO, UserDTO userDTO);
+    Recruiter getCurrentRecruiter();
 }

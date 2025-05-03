@@ -3,13 +3,14 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
 
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Answer {
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @GeneratedValue(strategy = GenerationType.UUID)
         private String id;
         private String content;
         @ManyToOne

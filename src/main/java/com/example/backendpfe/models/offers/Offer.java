@@ -19,11 +19,13 @@ public class Offer {
     private String description;
     private String dutiesAndResponsibilities;
     private String field;
-    private String location;
+    private String country;
+    private String city;
     private String minQualifications;
     private float salary;
     private String tools;
     private String workMode;
+    private String status = "ACTIVE";
 
     @ManyToOne
     private Recruiter recruiter;

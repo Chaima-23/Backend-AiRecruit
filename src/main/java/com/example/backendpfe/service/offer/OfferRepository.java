@@ -1,4 +1,4 @@
-package com.example.backendpfe.service;
+package com.example.backendpfe.service.offer;
 import com.example.backendpfe.models.idm.Recruiter;
 import com.example.backendpfe.models.offers.Offer;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,5 +10,6 @@ import java.util.List;
 public interface OfferRepository extends JpaRepository<Offer, String> {
 
         List<Offer> findByRecruiter(Recruiter recruiter);
+        List<Offer> findByStatus(String status);
 
 }

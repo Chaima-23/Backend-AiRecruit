@@ -7,8 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-interface RecruiterRepository extends JpaRepository<Recruiter, String> {
-    Optional<Recruiter> findByUsername(String username);
+public interface RecruiterRepository extends JpaRepository<Recruiter, String> {
+
+    Optional<Recruiter> findByEmail(String email);
     boolean existsByUsername(String username);
     boolean existsByEmail(String email);
 }

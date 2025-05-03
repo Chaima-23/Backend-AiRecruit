@@ -1,4 +1,4 @@
-package com.example.backendpfe.service;
+package com.example.backendpfe.service.offer;
 
 import com.example.backendpfe.models.idm.Recruiter;
 import com.example.backendpfe.models.offers.InternshipOffer;
@@ -42,7 +42,6 @@ public class OfferServiceImpl implements OfferService {
         if (internshipOffer == null) {
             throw new IllegalArgumentException("Internship offer cannot be null");
         }
-        // Valider les dates si elles sont présentes
         if (internshipOffer.getStartDate() != null && internshipOffer.getEndDate() != null) {
             if (internshipOffer.getEndDate().isBefore(internshipOffer.getStartDate())) {
                 throw new IllegalArgumentException("End date must be after start date for internship offer");
@@ -70,10 +69,7 @@ public class OfferServiceImpl implements OfferService {
         }
         Offer offer = offerRepository.findById(id)
                 .orElseThrow(() -> new OfferNotFoundException("Offer not found with ID: " + id));
-        Recruiter recruiter = recruiterService.getCurrentRecruiter();
-        if (!offer.getRecruiter().getId().equals(recruiter.getId())) {
-            throw new UnauthorizedAccessException("Unauthorized access to offer with ID: " + id);
-        }
+        // Ne pas vérifier le recruteur ici, car cette méthode est utilisée dans des contextes publics et protégés
         logger.debug("Retrieved offer with ID: {}", id);
         return offer;
     }
@@ -84,9 +80,13 @@ public class OfferServiceImpl implements OfferService {
         if (id == null || updatedOffer == null) {
             throw new IllegalArgumentException("Offer ID and updated offer cannot be null");
         }
-        Offer existingOffer = getOfferById(id); // Vérifie l'accès et l'existence
+        Offer existingOffer = offerRepository.findById(id)
+                .orElseThrow(() -> new OfferNotFoundException("Offer not found with ID: " + id));
+        Recruiter recruiter = recruiterService.getCurrentRecruiter();
+        if (!existingOffer.getRecruiter().getId().equals(recruiter.getId())) {
+            throw new UnauthorizedAccessException("Unauthorized access to offer with ID: " + id);
+        }
 
-        // Mise à jour des champs communs
         existingOffer.setField(updatedOffer.getField());
         existingOffer.setCountry(updatedOffer.getCountry());
         existingOffer.setCity(updatedOffer.getCity());
@@ -99,7 +99,6 @@ public class OfferServiceImpl implements OfferService {
         existingOffer.setWorkMode(updatedOffer.getWorkMode());
         existingOffer.setStatus(updatedOffer.getStatus());
 
-        // Mise à jour des champs spécifiques
         if (existingOffer instanceof JobOffer jobOffer && updatedOffer instanceof JobOffer updatedJobOffer) {
             jobOffer.setSalary(updatedJobOffer.getSalary());
             jobOffer.setPosition(updatedJobOffer.getPosition());
@@ -107,7 +106,6 @@ public class OfferServiceImpl implements OfferService {
         } else if (existingOffer instanceof InternshipOffer internshipOffer && updatedOffer instanceof InternshipOffer updatedInternshipOffer) {
             LocalDate startDate = updatedInternshipOffer.getStartDate();
             LocalDate endDate = updatedInternshipOffer.getEndDate();
-            // Valider les dates
             if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
                 throw new IllegalArgumentException("End date must be after start date for internship offer");
             }
@@ -128,9 +126,20 @@ public class OfferServiceImpl implements OfferService {
         if (id == null) {
             throw new IllegalArgumentException("Offer ID cannot be null");
         }
-        Offer offer = getOfferById(id); // Vérifie l'accès et l'existence
+        Offer offer = offerRepository.findById(id)
+                .orElseThrow(() -> new OfferNotFoundException("Offer not found with ID: " + id));
+        Recruiter recruiter = recruiterService.getCurrentRecruiter();
+        if (!offer.getRecruiter().getId().equals(recruiter.getId())) {
+            throw new UnauthorizedAccessException("Unauthorized access to offer with ID: " + id);
+        }
         offerRepository.delete(offer);
         logger.info("Deleted offer with ID: {}", id);
+    }
+
+    @Override
+    public List<Offer> getAllPublicOffers() {
+        // Retourne uniquement les offres avec le statut "ACTIVE"
+        return offerRepository.findByStatus("ACTIVE");
     }
 }
 

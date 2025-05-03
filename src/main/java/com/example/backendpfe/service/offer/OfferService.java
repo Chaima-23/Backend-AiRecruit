@@ -1,4 +1,4 @@
-package com.example.backendpfe.service;
+package com.example.backendpfe.service.offer;
 
 import com.example.backendpfe.models.offers.InternshipOffer;
 import com.example.backendpfe.models.offers.JobOffer;
@@ -13,4 +13,6 @@ public interface OfferService {
     Offer getOfferById(String id);
     Offer updateOffer(String id, Offer updatedOffer);
     void deleteOffer(String id);
+    List<Offer> getAllPublicOffers();
+
 }

@@ -27,13 +27,13 @@ public class SecurityConfig {
                         // Routes publiques
                         .requestMatchers("/", "/about", "/contact").permitAll()
                         .requestMatchers("/auth/sign-in", "/auth/get-started", "/auth/forget-password").permitAll()
-                        .requestMatchers("/offers", "/offers/**").permitAll()
+                        .requestMatchers("/offers", "/offers/**").permitAll() //consultation des offres publiques
 
                         // Routes protégées par rôle
                         .requestMatchers("/dashboard/admin").hasRole("ADMIN")
                         .requestMatchers("/dashboard/candidate").hasRole("CANDIDATE")
-                        .requestMatchers("/dashboard/recruiter").hasRole("RECRUITER")
-                        .requestMatchers("/auth/sign-up-candidate").hasRole("ADMIN")
+                        .requestMatchers("/dashboard/recruiter", "/dashboard/recruiter/**").hasRole("RECRUITER") // Inclut la gestion des offres
+                        .requestMatchers("/auth/sign-up-candidate").hasRole("CANDIDATE")
                         .requestMatchers("/auth/sign-up-recruiter").hasRole("RECRUITER")
 
                         // Routes nécessitant une authentification simple
