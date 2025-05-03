@@ -1,10 +1,8 @@
-package com.example.backendpfe.service.user.local;
+package com.example.backendpfe.service;
 
 import com.example.backendpfe.models.idm.Candidate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 interface CandidateRepository extends JpaRepository<Candidate, String> {

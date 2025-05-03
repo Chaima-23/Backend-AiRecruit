@@ -1,4 +1,4 @@
-package com.example.backendpfe.service.user.local;
+package com.example.backendpfe.service;
 
 import com.example.backendpfe.models.profile.Company;
 import org.springframework.data.jpa.repository.JpaRepository;

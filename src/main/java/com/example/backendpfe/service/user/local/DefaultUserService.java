@@ -1,7 +1,7 @@
-package com.example.backendpfe.service.user.local;
+package com.example.backendpfe.service.user;
 
 import com.example.backendpfe.models.idm.User;
-import com.example.backendpfe.service.user.UserService;
+import com.example.backendpfe.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +26,10 @@ public class DefaultUserService implements UserService {
 
     public User findByUsername(String username) {
         return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User Not Found"));
+    }
+    public User findByEmail(String email) {
+        return userRepository.findByUsername(email)
                 .orElseThrow(() -> new RuntimeException("User Not Found"));
     }
 

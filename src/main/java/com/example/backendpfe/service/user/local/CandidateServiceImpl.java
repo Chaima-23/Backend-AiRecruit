@@ -1,10 +1,9 @@
-package com.example.backendpfe.service.user.local;
+package com.example.backendpfe.service.user;
 
 import com.example.backendpfe.dto.CandidateDTO;
 import com.example.backendpfe.dto.UserDTO;
 import com.example.backendpfe.models.idm.Candidate;
-import com.example.backendpfe.service.user.CandidateService;
-import com.example.backendpfe.service.user.KeycloakAdminService;
+import com.example.backendpfe.repository.CandidateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
