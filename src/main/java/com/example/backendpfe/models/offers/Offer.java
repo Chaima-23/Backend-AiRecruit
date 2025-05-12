@@ -11,10 +11,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
-
 public class Offer {
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
     private LocalDate deadline;
     private String description;
     private String dutiesAndResponsibilities;
@@ -24,10 +25,12 @@ public class Offer {
     private String minQualifications;
     private float salary;
     private String tools;
-    private String workMode;
+
+    @Enumerated(EnumType.STRING)
+    private WorkMode workMode;
+
     private String status = "ACTIVE";
 
     @ManyToOne
     private Recruiter recruiter;
 }
-

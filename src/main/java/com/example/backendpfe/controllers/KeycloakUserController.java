@@ -27,7 +27,7 @@ public class KeycloakUserController {
                     userDTO.getUsername(),
                     userDTO.getEmail(),
                     userDTO.getPassword()
-            );
+                    );
             User user = new User();
             user.setUsername(userDTO.getUsername());
             user.setEmail(userDTO.getEmail());

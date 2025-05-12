@@ -7,6 +7,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@DiscriminatorValue("PART_TIME")
 
 public class PartTimeJob extends JobOffer {
     private String schedule;

@@ -8,6 +8,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@DiscriminatorValue("FULL_TIME")
 
 public class FullTimeJob extends JobOffer {
     private String benefits;

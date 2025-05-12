@@ -9,6 +9,5 @@ import lombok.*;
 @AllArgsConstructor
 public class Recruiter extends User {
     @OneToOne
-    //Company est le côté propriétaire de la relation : c'est elle qui controle la relation
     private Company company;
 }

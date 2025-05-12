@@ -7,13 +7,20 @@ import com.example.backendpfe.models.profile.Company;
 import com.example.backendpfe.service.user.RecruiterService;
 import com.example.backendpfe.service.user.KeycloakAdminService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class RecruiterServiceImpl implements RecruiterService {
+
+    private static final Logger logger = LoggerFactory.getLogger(RecruiterServiceImpl.class);
 
     private final RecruiterRepository recruiterRepository;
     private final CompanyRepository companyRepository;
@@ -62,10 +69,26 @@ public class RecruiterServiceImpl implements RecruiterService {
 
         return recruiter;
     }
+
+
+
     @Override
     public Recruiter getCurrentRecruiter() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = extractEmailFromToken();
+        if (email == null) {
+            throw new IllegalStateException("Email not found in token");
+        }
+        logger.info("Looking for recruiter with email: {}", email);
         return recruiterRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Recruiter not found"));
     }
-}
+
+    private String extractEmailFromToken() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof Jwt) {
+            Jwt jwt = (Jwt) authentication.getPrincipal();
+            return jwt.getClaim("email");
+        }
+        return null;
+    }
+    }

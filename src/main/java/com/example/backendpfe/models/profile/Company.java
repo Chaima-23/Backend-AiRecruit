@@ -1,5 +1,6 @@
 package com.example.backendpfe.models.profile;
 import com.example.backendpfe.models.idm.Recruiter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,6 +25,7 @@ public class Company {
     private String website;
 
     @OneToOne(mappedBy = "company")
+    @JsonBackReference
     private Recruiter recruiter;
 }
 
