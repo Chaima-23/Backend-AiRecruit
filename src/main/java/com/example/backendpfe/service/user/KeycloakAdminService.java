@@ -1,5 +1,5 @@
 package com.example.backendpfe.service.user;
 
 public interface KeycloakAdminService {
-    String createUserAndGetId(String username, String email, String password);
+    String createUserAndGetId(String username, String email, String password, String firstName, String lastName, String role);
 }

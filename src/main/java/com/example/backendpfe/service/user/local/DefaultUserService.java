@@ -28,31 +28,27 @@ public class DefaultUserService implements UserService {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User Not Found"));
     }
+
     public User findByEmail(String email) {
-        return userRepository.findByUsername(email)
+        return userRepository.findByEmail(email) // Update to use findByEmail
                 .orElseThrow(() -> new RuntimeException("User Not Found"));
+    }
+
+    // DefaultUserService
+    @Override
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
-    /*
-    //Associe un rôle existant à un utilisateur
-    public User addRoleToUser(String username, String roleName) {
-        User user = findByUsername(username);
-        Role role = roleRepository.findByRole(roleName)
-                .orElseThrow(() -> new RuntimeException("Role not found"));
-
-        user.getRoles().add(role);
-        return userRepository.save(user);
-    }
-
-    //Permet de sauvegarder un nouveau rôle dans la base
-    public Role addRole(Role role) {
-        return roleRepository.save(role);
-    }
-    */
 
 }
 

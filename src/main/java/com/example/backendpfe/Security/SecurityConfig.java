@@ -22,7 +22,7 @@ public class SecurityConfig {
     @Order(1)
     public SecurityFilterChain publicEndpoints(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/hello", "/about", "/contact", "/auth/**", "/offers/**", "/api/candidates/register","/api/recruiters/register")
+                .securityMatcher("/about", "/contact", "/auth/**", "/offers/**", "/api/candidates/register", "/api/recruiters/register")
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
 
@@ -42,9 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/dashboard/candidate").hasAuthority("ROLE_CANDIDATE")
                         .requestMatchers("/dashboard/recruiter", "/dashboard/recruiter/**").hasAuthority("ROLE_RECRUITER")
                         .requestMatchers("/dashboard/recruiter/offers/**").hasAuthority("ROLE_RECRUITER")
-                        /*.requestMatchers("/api/candidates/register").hasAuthority("ROLE_CANDIDATE")
-                        .requestMatchers("/api/recruiters/register").hasAuthority("ROLE_RECRUITER")*/
-                        .requestMatchers("/api/users").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/users/admin").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(auth -> auth.jwt(jwt -> jwt.jwtAuthenticationConverter(keycloakRoleConverter)));

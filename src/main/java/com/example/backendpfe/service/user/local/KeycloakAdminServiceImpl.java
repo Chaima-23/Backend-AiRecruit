@@ -5,8 +5,11 @@ import jakarta.ws.rs.core.Response;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.representations.idm.CredentialRepresentation;
+import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 
 @Service
 public class KeycloakAdminServiceImpl implements KeycloakAdminService {
@@ -14,7 +17,7 @@ public class KeycloakAdminServiceImpl implements KeycloakAdminService {
     private final String realm = "Jobs";
     private final String clientId = "admin-cli"; //pour un accès admin via API.
     private final String username = "admin";
-    private final String password = "admin";
+    private final String password = "123456";
 
 
     // se connecter au serveur Keycloak avec un "admin client"
@@ -30,12 +33,14 @@ public class KeycloakAdminServiceImpl implements KeycloakAdminService {
     }
 
     @Override
-    public String createUserAndGetId(String username, String email, String password) {
+    public String createUserAndGetId(String username, String email, String password,String firstName, String lastName, String role) {
         Keycloak keycloak = getKeycloakInstance();
 
         UserRepresentation user = new UserRepresentation();
         user.setUsername(username);
         user.setEmail(email);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
         user.setEnabled(true);
 
         user.setEmailVerified(true);
@@ -53,6 +58,11 @@ public class KeycloakAdminServiceImpl implements KeycloakAdminService {
         passwordCred.setValue(password);
 
         keycloak.realm(realm).users().get(userId).resetPassword(passwordCred);
+
+        // Assign role
+        RoleRepresentation roleRepresentation = keycloak.realm(realm).roles().get(role).toRepresentation();
+        keycloak.realm(realm).users().get(userId).roles().realmLevel()
+                .add(Collections.singletonList(roleRepresentation));
 
         return userId;
     }

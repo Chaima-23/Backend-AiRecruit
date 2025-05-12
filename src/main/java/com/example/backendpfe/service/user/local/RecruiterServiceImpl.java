@@ -6,6 +6,8 @@ import com.example.backendpfe.models.idm.Recruiter;
 import com.example.backendpfe.models.profile.Company;
 import com.example.backendpfe.service.user.RecruiterService;
 import com.example.backendpfe.service.user.KeycloakAdminService;
+import com.example.backendpfe.service.user.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,15 +27,17 @@ public class RecruiterServiceImpl implements RecruiterService {
     private final RecruiterRepository recruiterRepository;
     private final CompanyRepository companyRepository;
     private final KeycloakAdminService keycloakAdminService;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     @Override
     public Recruiter registerRecruiter(RecruiterDTO recruiterDTO, UserDTO userDTO) {
 
-        if (recruiterRepository.existsByUsername(userDTO.getUsername())) {
+        if (userService.existsByUsername(userDTO.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
-        if (recruiterRepository.existsByEmail(userDTO.getEmail())) {
+        if (userService.existsByEmail(userDTO.getEmail())) {
             throw new RuntimeException("Email already exists");
         }
 
@@ -52,14 +56,17 @@ public class RecruiterServiceImpl implements RecruiterService {
         company.setDescription(recruiterDTO.getDescription());
         companyRepository.save(company);
 
-        // Créer l'utilisateur dans Keycloak
-        String keycloakId = keycloakAdminService.createUserAndGetId(userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword());
+        // Créer l'utilisateur dans Keycloak with role
+        String keycloakId = keycloakAdminService.createUserAndGetId(userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword(),userDTO.getFirstName(),
+                userDTO.getLastName(), "RECRUITER");
 
         // Créer Recruiter
         Recruiter recruiter = new Recruiter();
         recruiter.setUsername(userDTO.getUsername());
         recruiter.setEmail(userDTO.getEmail());
         recruiter.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        recruiter.setFirstName(userDTO.getFirstName());
+        recruiter.setLastName(userDTO.getLastName());
         recruiter.setKeycloakId(keycloakId);
         recruiter.setCompany(company);
         recruiter = recruiterRepository.save(recruiter);
