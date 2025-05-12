@@ -15,18 +15,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-
 @Component
 public class KeycloakRoleConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
-    private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter=
-            new JwtGrantedAuthoritiesConverter();
-
+    private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
 
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
-
-        //extraire la section "realm_access" du JWT, c’est là où Keycloak stocke les rôles
         Map<String, Object> realmAccess = (Map<String, Object>) jwt.getClaims().get("realm_access");
 
         if (realmAccess == null || realmAccess.isEmpty()) {
@@ -37,13 +32,9 @@ public class KeycloakRoleConverter implements Converter<Jwt, AbstractAuthenticat
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(Collectors.toList());
 
-        //Fusionner les rôles de la rubrique scope (email, profile) avec les rôles Keycloak.
-        authorities = Stream.concat( jwtGrantedAuthoritiesConverter.convert(jwt).stream(),
-                authorities.stream()
-        ).collect(Collectors.toSet());
-
+        authorities = Stream.concat(jwtGrantedAuthoritiesConverter.convert(jwt).stream(), authorities.stream())
+                .collect(Collectors.toSet());
 
         return new JwtAuthenticationToken(jwt, authorities, jwt.getClaim("preferred_username"));
-
     }
 }

@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/dashboard/recruiter/offers")
-@PreAuthorize("hasRole('RECRUITER')") // Sécurise tous les endpoints de ce contrôleur
 public class RecruiterOfferController {
 
     private final OfferService offerService;

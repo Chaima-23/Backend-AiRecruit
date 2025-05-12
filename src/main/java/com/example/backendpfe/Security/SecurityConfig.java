@@ -19,35 +19,29 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .sessionManagement( session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         // Routes publiques
                         .requestMatchers("/", "/about", "/contact").permitAll()
                         .requestMatchers("/auth/sign-in", "/auth/get-started", "/auth/forget-password").permitAll()
-                        .requestMatchers("/offers", "/offers/**").permitAll() //consultation des offres publiques
+                        .requestMatchers("/offers", "/offers/**").permitAll() // Consultation des offres publiques
 
                         // Routes protégées par rôle
                         .requestMatchers("/dashboard/admin").hasRole("ADMIN")
                         .requestMatchers("/dashboard/candidate").hasRole("CANDIDATE")
-                        .requestMatchers("/dashboard/recruiter", "/dashboard/recruiter/**").hasRole("RECRUITER") // Inclut la gestion des offres
-                        .requestMatchers("/auth/sign-up-candidate").hasRole("CANDIDATE")
-                        .requestMatchers("/auth/sign-up-recruiter").hasRole("RECRUITER")
+                        .requestMatchers("/dashboard/recruiter", "/dashboard/recruiter/**").hasRole("RECRUITER") // Redondant avec /offers/**
+                        .requestMatchers("/dashboard/recruiter/offers/**").hasRole("RECRUITER") // Couvre tous les sous-endpoints
+                        .requestMatchers("/api/candidates/register").hasRole("CANDIDATE")
+                        .requestMatchers("/api/recruiters/register").hasRole("RECRUITER")
+                        .requestMatchers("/api/users").hasRole("ADMIN") // Protège la création d'utilisateurs
 
-                        // Routes nécessitant une authentification simple
-                        .requestMatchers("/profile/**").authenticated()
-                        .requestMatchers("/evaluation/**").authenticated()
 
                         // Toute autre route
                         .anyRequest().authenticated()
                 )
-
-        .oauth2ResourceServer(auth->auth.jwt(jwt->
-                jwt.jwtAuthenticationConverter(keycloakRoleConverter))); // Active la validation des tokens JWT
+                .oauth2ResourceServer(auth -> auth.jwt(jwt -> jwt.jwtAuthenticationConverter(keycloakRoleConverter))); // Active la validation des tokens JWT
 
         return http.build();
     }
 }
-

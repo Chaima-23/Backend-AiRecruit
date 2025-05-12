@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class KeycloakAdminServiceImpl implements KeycloakAdminService {
     private final String serverUrl = "http://localhost:8180";
-    private final String realm = "jobs";
+    private final String realm = "Jobs";
     private final String clientId = "admin-cli"; //pour un accès admin via API.
     private final String username = "admin";
     private final String password = "admin";
@@ -24,6 +24,7 @@ public class KeycloakAdminServiceImpl implements KeycloakAdminService {
                 .realm(realm)
                 .username(username)
                 .password(password)
+                .grantType("password")
                 .clientId(clientId)
                 .build();
     }
@@ -36,6 +37,8 @@ public class KeycloakAdminServiceImpl implements KeycloakAdminService {
         user.setUsername(username);
         user.setEmail(email);
         user.setEnabled(true);
+
+        user.setEmailVerified(true);
 
         Response response = keycloak.realm(realm).users().create(user);
         if (response.getStatus() != 201) {

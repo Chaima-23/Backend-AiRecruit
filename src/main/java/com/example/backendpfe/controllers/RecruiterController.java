@@ -8,23 +8,29 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-    @RestController
-    @RequestMapping("/api/recruiters")
-    @RequiredArgsConstructor
-    @CrossOrigin(origins = "*")
-    public class RecruiterController {
+@RestController
+@RequestMapping("/api/recruiters")
+@CrossOrigin(origins = "*")
+public class RecruiterController {
 
-        private final RecruiterService recruiterService;
+    private final RecruiterService recruiterService;
 
-        @PostMapping("/register")
-        public ResponseEntity<String> register(@RequestBody RecruiterDTO recruiterDTO, @RequestBody UserDTO userDTO) {
-            try {
-                Recruiter createdRec = recruiterService.registerRecruiter(recruiterDTO, userDTO);
-                return ResponseEntity.ok("Recruiter registered successfully");
-            } catch (RuntimeException e) {
-                return ResponseEntity.badRequest().body(e.getMessage());
-            }
+    public RecruiterController(RecruiterService recruiterService) {
+        this.recruiterService = recruiterService;
+    }
+
+    public record RegisterRequest(RecruiterDTO recruiterDTO, UserDTO userDTO) {
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
+        try {
+            Recruiter createdRec = recruiterService.registerRecruiter(request.recruiterDTO(), request.userDTO());
+            return ResponseEntity.ok("Recruiter registered successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+}
 
 
