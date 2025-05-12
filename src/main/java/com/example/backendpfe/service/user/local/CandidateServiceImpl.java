@@ -5,6 +5,8 @@ import com.example.backendpfe.dto.UserDTO;
 import com.example.backendpfe.models.idm.Candidate;
 import com.example.backendpfe.service.user.CandidateService;
 import com.example.backendpfe.service.user.KeycloakAdminService;
+import com.example.backendpfe.service.user.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,15 +25,17 @@ public class CandidateServiceImpl implements CandidateService {
 
     private final CandidateRepository candidateRepository;
     private final KeycloakAdminService keycloakAdminService;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     @Override
     public Candidate registerCandidate(CandidateDTO candidateDTO, UserDTO userDTO) {
 
-        if (candidateRepository.existsByUsername(userDTO.getUsername())) {
+        if (userService.existsByUsername(userDTO.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
-        if (candidateRepository.existsByEmail(userDTO.getEmail())) {
+        if (userService.existsByEmail(userDTO.getEmail())) {
             throw new RuntimeException("Email already exists");
         }
 
@@ -43,6 +48,8 @@ public class CandidateServiceImpl implements CandidateService {
         candidate.setUsername(userDTO.getUsername());
         candidate.setEmail(userDTO.getEmail());
         candidate.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        candidate.setFirstName(userDTO.getFirstName());
+        candidate.setLastName(userDTO.getLastName());
         candidate.setDateOfBirth(candidateDTO.getDateOfBirth());
         candidate.setGender(candidateDTO.getGender());
         candidate.setCountry(candidateDTO.getCountry());
@@ -57,11 +64,14 @@ public class CandidateServiceImpl implements CandidateService {
         candidate.setCvFilePath(cvPath);
         candidate.setCoverLetterFilePath(coverLetterPath);
 
-        // Save in Keycloak
+        // Save in Keycloak with role
         String keycloakId = keycloakAdminService.createUserAndGetId(
                 userDTO.getUsername(),
                 userDTO.getEmail(),
-                userDTO.getPassword()
+                userDTO.getPassword(),
+                userDTO.getFirstName(),
+                userDTO.getLastName(),
+                "CANDIDATE"
         );
         candidate.setKeycloakId(keycloakId);
 
@@ -72,11 +82,20 @@ public class CandidateServiceImpl implements CandidateService {
     private String saveFile(MultipartFile file) {
         if (file == null || file.isEmpty()) return null;
 
+        // Validate file type
+        String contentType = file.getContentType();
+        if (!"application/pdf".equals(contentType)) {
+            throw new RuntimeException("Only PDF files are allowed");
+        }
+
         try {
-            String directory = "uploads/";
+            String directory = "Uploads/";
             Files.createDirectories(Paths.get(directory));
 
-            Path filePath = Paths.get(directory + file.getOriginalFilename());
+            // Sanitize file name
+            String originalFilename = file.getOriginalFilename();
+            String sanitizedFilename = UUID.randomUUID() + ".pdf"; // Use UUID to avoid conflicts
+            Path filePath = Paths.get(directory + sanitizedFilename);
             Files.write(filePath, file.getBytes());
             return filePath.toString();
         } catch (IOException e) {

@@ -10,15 +10,28 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/candidates")
-@RequiredArgsConstructor
 @CrossOrigin(origins = "*")
+@RequiredArgsConstructor
 public class CandidateController {
     private final CandidateService candidateService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerCandidate(
+    public ResponseEntity<String> register(
             @ModelAttribute CandidateDTO candidateDTO,
-            @ModelAttribute UserDTO userDTO) {
+            @RequestParam String username,
+            @RequestParam String email,
+            @RequestParam String password,
+            @RequestParam String firstName,
+            @RequestParam String lastName)
+        {
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername(username);
+        userDTO.setEmail(email);
+        userDTO.setPassword(password);
+        userDTO.setFirstName(firstName);
+        userDTO.setLastName(lastName);
+
         try {
             Candidate createdCan = candidateService.registerCandidate(candidateDTO, userDTO);
             return ResponseEntity.ok("Candidate registered successfully");

@@ -19,5 +19,7 @@ public class User {
     private String username;
     private String password;
     private String keycloakId;
+    private String firstName;
+    private String lastName;
 
 }
