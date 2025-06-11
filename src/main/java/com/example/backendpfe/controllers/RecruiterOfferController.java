@@ -20,9 +20,9 @@ public class RecruiterOfferController {
         this.offerService = offerService;
     }
 
-    // Crée une nouvelle offre d'emploi full-time avec message de succès
     @PostMapping(value = "/job/fulltime", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> createFullTimeJob(@RequestBody FullTimeJob fullTimeJob) {
+        // Pas besoin de définir offerType manuellement si @DiscriminatorValue est utilisé
         Offer created = offerService.createFullTimeJob(fullTimeJob);
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Offer created successfully");
@@ -30,7 +30,6 @@ public class RecruiterOfferController {
         return ResponseEntity.ok(response);
     }
 
-    // Crée une nouvelle offre d'emploi part-time avec message de succès
     @PostMapping("/job/parttime")
     public ResponseEntity<Map<String, Object>> createPartTimeJob(@RequestBody PartTimeJob partTimeJob) {
         Offer created = offerService.createPartTimeJob(partTimeJob);
@@ -40,7 +39,6 @@ public class RecruiterOfferController {
         return ResponseEntity.ok(response);
     }
 
-    // Crée une nouvelle offre de stage avec message de succès
     @PostMapping("/internship")
     public ResponseEntity<Map<String, Object>> createInternshipOffer(@RequestBody InternshipOffer internshipOffer) {
         Offer createdOffer = offerService.createInternshipOffer(internshipOffer);
@@ -49,7 +47,6 @@ public class RecruiterOfferController {
         response.put("data", createdOffer);
         return ResponseEntity.ok(response);
     }
-
     // Récupère toutes les offres du recruteur actuel (tous types) avec message de succès
     @GetMapping("/my-offers")
     public ResponseEntity<Map<String, Object>> getOffersByCurrentRecruiter() {

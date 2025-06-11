@@ -25,7 +25,7 @@ public class SecurityConfig {
     @Order(1)
     public SecurityFilterChain publicEndpoints(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/about", "/contact", "/auth/**", "/offers/**", "/api/candidates/register", "/api/recruiters/register")
+                .securityMatcher("/api/contact", "/offers/**", "/api/candidates/register", "/api/recruiters/register")
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
 

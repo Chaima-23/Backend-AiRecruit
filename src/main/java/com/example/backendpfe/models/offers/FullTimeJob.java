@@ -14,4 +14,5 @@ import lombok.*;
 public class FullTimeJob extends JobOffer {
     private String benefits;
     private String contractType;
+
 }

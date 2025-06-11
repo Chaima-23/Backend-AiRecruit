@@ -25,7 +25,7 @@ public class Offer {
     private String minQualifications;
     private float salary;
     private String tools;
-    private String type;
+    private String offerType;
     @Enumerated(EnumType.STRING)
     private WorkMode workMode;
 
