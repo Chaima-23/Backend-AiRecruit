@@ -5,4 +5,5 @@ import com.example.backendpfe.models.idm.Administrator;
 
 public interface AdminService {
     Administrator createAdmin(UserDTO userDTO);
+    Administrator updateOwnAdmin(UserDTO userDTO);
 }

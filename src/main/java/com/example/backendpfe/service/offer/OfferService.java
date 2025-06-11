@@ -21,5 +21,6 @@ public interface OfferService {
     void deleteFullTimeJob(String id);
     void deletePartTimeJob(String id);
     void deleteInternshipOffer(String id);
+    List<Offer> getAllOffers();
 
 }

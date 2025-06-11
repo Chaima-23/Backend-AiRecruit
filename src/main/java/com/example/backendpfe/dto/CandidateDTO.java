@@ -19,6 +19,5 @@ public class CandidateDTO {
     private String technicalSkills;
     private String softSkills;
 
-    private MultipartFile cvFile;
-    private MultipartFile coverLetterFile;
+
 }

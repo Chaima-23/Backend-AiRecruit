@@ -2,6 +2,7 @@ package com.example.backendpfe.service.offer;
 
 import com.example.backendpfe.models.idm.Recruiter;
 import com.example.backendpfe.models.offers.*;
+import com.example.backendpfe.repositories.OfferRepository;
 import com.example.backendpfe.service.user.RecruiterService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -9,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -173,19 +173,11 @@ public class OfferServiceImpl implements OfferService {
     @Override
     @Transactional
     public void deleteOffer(String id) {
-        if (id == null) {
-            throw new IllegalArgumentException("Offer ID cannot be null");
+        if (!offerRepository.existsById(id)) {
+            throw new RuntimeException("Offer not found with id: " + id);
         }
-        Offer offer = offerRepository.findById(id)
-                .orElseThrow(() -> new OfferNotFoundException("Offer not found with ID: " + id));
-        Recruiter recruiter = recruiterService.getCurrentRecruiter();
-        if (!offer.getRecruiter().getId().equals(recruiter.getId())) {
-            throw new UnauthorizedAccessException("Unauthorized access to offer with ID: " + id);
-        }
-        offerRepository.delete(offer);
-        logger.info("Deleted offer with ID: {}", id);
+        offerRepository.deleteById(id);
     }
-
     // Supprime une offre d'emploi full-time
     @Override
     @Transactional
@@ -246,6 +238,12 @@ public class OfferServiceImpl implements OfferService {
         logger.info("Deleted internship offer with ID: {}", id);
     }
 
+    @Override
+    public List<Offer> getAllOffers() {
+        List<Offer> offers = offerRepository.findAll();
+        logger.debug("Retrieved {} offers for admin", offers.size());
+        return offers;
+    }
     // Récupère toutes les offres publiques avec statut "ACTIVE"
     @Override
     public List<Offer> getAllPublicOffers() {

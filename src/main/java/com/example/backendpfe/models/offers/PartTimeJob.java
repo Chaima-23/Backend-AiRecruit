@@ -5,6 +5,7 @@ import lombok.*;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue("PART_TIME")

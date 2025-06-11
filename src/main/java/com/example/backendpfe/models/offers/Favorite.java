@@ -1,6 +1,7 @@
 package com.example.backendpfe.models.offers;
 
-import com.example.backendpfe.models.idm.User;
+import com.example.backendpfe.models.idm.Recruiter;
+import com.example.backendpfe.models.request.ApplicationRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,15 +9,15 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Favorite {
 
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @ManyToOne
-    private User candidate;
+    private Recruiter recruiter;
 
     @ManyToOne
-    private Offer offer;
+    private ApplicationRequest applicationRequest;
 }

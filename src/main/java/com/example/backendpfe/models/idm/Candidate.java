@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 
@@ -21,6 +22,5 @@ public class Candidate extends User {
     private int yearsOfExperience;
     private String technicalSkills;
     private String softSkills;
-    private String cvFilePath;
-    private String coverLetterFilePath;
+
 }

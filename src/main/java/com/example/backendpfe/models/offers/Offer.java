@@ -25,12 +25,13 @@ public class Offer {
     private String minQualifications;
     private float salary;
     private String tools;
-
+    private String type;
     @Enumerated(EnumType.STRING)
     private WorkMode workMode;
 
     private String status = "ACTIVE";
 
     @ManyToOne
+    @JoinColumn(name = "recruiter_id", nullable = false)
     private Recruiter recruiter;
 }
