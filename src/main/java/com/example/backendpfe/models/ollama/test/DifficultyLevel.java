@@ -1,4 +1,4 @@
-package com.example.backendpfe.models.test;
+package com.example.backendpfe.models.ollama.test;
 
 public enum DifficultyLevel {
     BEGINNER,

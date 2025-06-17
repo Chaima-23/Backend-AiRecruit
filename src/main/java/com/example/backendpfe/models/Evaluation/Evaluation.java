@@ -1,5 +1,6 @@
-package com.example.backendpfe.models.test;
+package com.example.backendpfe.models.Evaluation;
 import com.example.backendpfe.models.idm.Candidate;
+import com.example.backendpfe.models.ollama.test.Test;
 import jakarta.persistence.*;
 import lombok.*;
 

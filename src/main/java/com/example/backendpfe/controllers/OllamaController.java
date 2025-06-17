@@ -22,7 +22,7 @@ public class OllamaController {
         }
 
         // Appeler Ollama dynamiquement avec le texte reçu
-        String response = ollamaService.getCompletion(text);
+        String response = ollamaService.getCompletionForCv(text);
 
         // Enregistrement dans la BDD
         ollamaService.saveParsedResponse(response);
@@ -34,9 +34,16 @@ public class OllamaController {
 
     @GetMapping("/generate")
     public ResponseEntity<String> generate(@RequestParam String prompt) {
-        String response = ollamaService.getCompletion(prompt);
+        String response = ollamaService.getCompletionForCv(prompt);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/test/save")
+    public ResponseEntity<String> saveTest(@RequestBody String json) {
+        ollamaService.saveTestFromJson(json);
+        return ResponseEntity.ok("Test sauvegardé avec succès !");
+    }
+
 
     /*@GetMapping("/hello")
     public ResponseEntity<String> hello() {

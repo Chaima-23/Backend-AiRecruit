@@ -15,6 +15,16 @@ public class CV {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> phone;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> email;
+
+    private String name;
+
+    private String specialization;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cv")
     private List<CvEducation> education;
 
@@ -24,13 +34,14 @@ public class CV {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cv")
     private List<CvProject> project;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cv")
-    private List<CvSkill> technicalSkills;
+    @ElementCollection
+    private List<String> technicalSkills;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cv")
-    private List<CvPersonalSkill> personalSkills;
+    @ElementCollection
+    private List<String> personalSkills;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cv_id")
-    private List<CvNote> notes;
+    @ElementCollection
+    @CollectionTable(name = "cv_notes", joinColumns = @JoinColumn(name = "cv_id"))
+    @Column(name = "note", length = 1000)
+    private List<String> notes;
 }

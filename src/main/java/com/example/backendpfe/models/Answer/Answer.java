@@ -1,7 +1,7 @@
-package com.example.backendpfe.models.test;
+package com.example.backendpfe.models.Answer;
+import com.example.backendpfe.models.ollama.test.Question;
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDate;
 
 
 @Entity

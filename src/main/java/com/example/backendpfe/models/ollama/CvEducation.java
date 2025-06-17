@@ -1,5 +1,6 @@
 package com.example.backendpfe.models.ollama;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,5 +21,6 @@ public class CvEducation {
 
     private String startDate;
     private String endDate;
+    @Column(length = 4000)
     private String description;
 }
