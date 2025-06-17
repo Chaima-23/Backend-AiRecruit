@@ -3,7 +3,6 @@ package com.example.backendpfe.controllers;
 import com.example.backendpfe.models.offers.Offer;
 import com.example.backendpfe.service.offer.OfferService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
