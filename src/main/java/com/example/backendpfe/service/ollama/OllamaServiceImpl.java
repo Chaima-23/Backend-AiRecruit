@@ -209,6 +209,7 @@ public class OllamaServiceImpl implements OllamaService {
 
 
             System.out.println("Test generated successfully: " + completionForTest);
+            saveParsedTest(completionForTest);
         } catch (Exception e) {
             System.err.println("Erreur lors de l'enregistrement du CV : " + e.getMessage());
             e.printStackTrace();
@@ -217,44 +218,56 @@ public class OllamaServiceImpl implements OllamaService {
     }
 
     @Override
-    @Transactional
-    public void saveTestFromJson(String jsonResponse) {
+    public Test extractTestFromJson(String jsonResponse) {
         try {
-
-            Test raw = objectMapper.readValue(jsonResponse, Test.class);
-            System.out.println("Test parsed successfully: " + raw.getTitle());
-
+            System.out.println("JSON response to parse for test: " + jsonResponse);
+            Test test = objectMapper.readValue(jsonResponse, Test.class);
+            System.out.println("Test parsed successfully: " + test);
+            return test;
+        } catch (Exception e) {
+            System.err.println("Erreur lors du parsing du test : " + e.getMessage());
+            e.printStackTrace();
+            throw new IllegalStateException("Failed to parse test data from JSON", e);
+        }
+    }
+    @Override
+    @Transactional
+    public void saveParsedTest(String jsonResponse) {
+        try {
+            Test raw = extractTestFromJson(jsonResponse);
 
             Test tempTest = new Test();
-            Test test = testRepository.save(tempTest);
-
-
-            test.setTitle(raw.getTitle());
+            tempTest.setTitle(raw.getTitle());
+            final Test savedTest = testRepository.save(tempTest);
 
             if (raw.getQuestions() != null) {
-                List<Question> questions = raw.getQuestions().stream().map(q ->
-                        Question.builder()
-                                .test(test) // association
+                List<Question> questions = raw.getQuestions().stream()
+                        .map(q -> Question.builder()
                                 .content(q.getContent())
                                 .type(q.getType())
                                 .options(q.getOptions())
                                 .correctOptions(q.getCorrectOptions())
+                                .test(savedTest)
                                 .build()
-                ).toList();
+                        ).toList();
 
                 questions = new ArrayList<>(questionRepository.saveAll(questions));
-                test.setQuestions(questions);
+                savedTest.setQuestions(questions);
             }
-            testRepository.save(test);
 
-            System.out.println("Test enregistré avec succès dans la base de données.");
+            testRepository.save(savedTest);
 
+            System.out.println("Test sauvegardé avec succès avec ses questions !");
         } catch (Exception e) {
             System.err.println("Erreur lors de l'enregistrement du test : " + e.getMessage());
             e.printStackTrace();
-            throw new IllegalStateException("Erreur lors de l'enregistrement du test", e);
+            throw new IllegalStateException("Erreur lors de la sauvegarde du test", e);
         }
     }
+
+
+
+
 
 }
 

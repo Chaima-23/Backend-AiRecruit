@@ -1,6 +1,8 @@
 package com.example.backendpfe.service.ollama;
 
 import com.example.backendpfe.models.ollama.CV;
+import com.example.backendpfe.models.ollama.test.Test;
+
 import java.util.List;
 
 public interface OllamaService {
@@ -10,6 +12,6 @@ public interface OllamaService {
 
 
     String getCompletionForTest(List<String> skills, int numberOfQuestions);
-    void saveTestFromJson(String jsonResponse);
-
+    void saveParsedTest(String jsonResponse);
+    Test extractTestFromJson(String jsonResponse);
 }

@@ -40,7 +40,7 @@ public class OllamaController {
 
     @PostMapping("/test/save")
     public ResponseEntity<String> saveTest(@RequestBody String json) {
-        ollamaService.saveTestFromJson(json);
+        ollamaService.saveParsedTest(json);
         return ResponseEntity.ok("Test sauvegardé avec succès !");
     }
 
