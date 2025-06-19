@@ -14,4 +14,7 @@ public interface OllamaService {
     String getCompletionForTest(List<String> skills, int numberOfQuestions);
     void saveParsedTest(String jsonResponse);
     Test extractTestFromJson(String jsonResponse);
+
+    Test getLatestTest();
+
 }

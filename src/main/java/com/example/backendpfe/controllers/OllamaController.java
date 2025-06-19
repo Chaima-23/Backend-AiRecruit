@@ -1,14 +1,18 @@
 package com.example.backendpfe.controllers;
+import com.example.backendpfe.models.ollama.test.Test;
 import com.example.backendpfe.service.ollama.OllamaService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/ollama")
 @RequiredArgsConstructor
+@CrossOrigin(value = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class OllamaController {
 
     private final OllamaService ollamaService;
@@ -42,6 +46,23 @@ public class OllamaController {
     public ResponseEntity<String> saveTest(@RequestBody String json) {
         ollamaService.saveParsedTest(json);
         return ResponseEntity.ok("Test sauvegardé avec succès !");
+    }
+
+
+    @GetMapping("/latest-test")
+    public ResponseEntity<Map<String, Object>> getLatestTest() {
+        try {
+            Test test = ollamaService.getLatestTest();
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", test != null ? "Latest test retrieved" : "No test available");
+            response.put("data", test);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Error: " + e.getMessage());
+            response.put("data", null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
 

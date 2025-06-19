@@ -265,6 +265,12 @@ public class OllamaServiceImpl implements OllamaService {
         }
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Test getLatestTest() {
+        return testRepository.findTopByOrderByIdDesc()
+                .orElseThrow(() -> new IllegalStateException("No tests found"));
+    }
 
 
 

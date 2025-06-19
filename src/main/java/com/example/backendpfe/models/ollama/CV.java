@@ -1,5 +1,6 @@
 package com.example.backendpfe.models.ollama;
 
+import com.example.backendpfe.models.ollama.test.Test;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -44,4 +45,9 @@ public class CV {
     @CollectionTable(name = "cv_notes", joinColumns = @JoinColumn(name = "cv_id"))
     @Column(name = "note", length = 1000)
     private List<String> notes;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "test_id", referencedColumnName = "id")
+    private Test test;
+
 }

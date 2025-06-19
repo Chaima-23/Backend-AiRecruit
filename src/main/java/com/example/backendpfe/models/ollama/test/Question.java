@@ -1,11 +1,12 @@
 package com.example.backendpfe.models.ollama.test;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
-import java.util.UUID;
+
 
 @Entity
 @Data
@@ -16,7 +17,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private String id;
 
     @Column(length = 1000)
     private String content;
@@ -36,5 +37,7 @@ public class Question {
 
     @ManyToOne
     @JoinColumn(name = "test_id")
+    @ToString.Exclude
+    @JsonIgnore
     private Test test;
 }
