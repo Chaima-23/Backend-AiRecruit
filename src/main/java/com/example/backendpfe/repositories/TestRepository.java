@@ -6,4 +6,6 @@ import java.util.Optional;
 
 public interface TestRepository extends JpaRepository<Test, String> {
     Optional<Test> findTopByOrderByIdDesc();
+    Optional<Test> findByCvId(String cvId);
+
 }

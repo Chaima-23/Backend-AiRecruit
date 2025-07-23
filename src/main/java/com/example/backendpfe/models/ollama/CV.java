@@ -46,8 +46,6 @@ public class CV {
     @Column(name = "note", length = 1000)
     private List<String> notes;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "test_id", referencedColumnName = "id")
-    private Test test;
+
 
 }

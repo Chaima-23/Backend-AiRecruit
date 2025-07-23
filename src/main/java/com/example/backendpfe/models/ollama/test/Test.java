@@ -25,5 +25,8 @@ public class Test {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cv_id", referencedColumnName = "id")
-    private CV test;
+    private CV cv;
+
+
+
 }
