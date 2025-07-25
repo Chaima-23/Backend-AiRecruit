@@ -1,5 +1,35 @@
-# ProjetPfe
+# 🧠 AIRecruit – Backend de la plateforme d’évaluation des candidatures
+Ce dépôt contient la partie backend de AIRecruit, une plateforme de recrutement intelligente basée sur l’IA. Ce backend gère l’authentification, la gestion des utilisateurs, la publication des offres, l’analyse des CV, la génération de tests et l’évaluation automatique.
 
+# 🌐 Technologies utilisées
+Langage : Java 17
+
+Framework : Spring Boot
+
+Système de base de données : PostgreSQL
+
+Authentification : Keycloak (OpenID Connect / OAuth2)
+
+API REST : Spring Web + Spring Security
+
+ORM : Spring Data JPA / Hibernate
+
+Outils : Postman, Git
+
+# 🧠 Fonctionnalités principales
+🔐 Authentification sécurisée avec Keycloak (candidat, recruteur, admin)
+
+👤 Gestion des utilisateurs (inscription, rôles, suppression/modification)
+
+📂 Gestion des offres d’emploi et de stage (CRUD complet)
+
+📄 Analyse des CV PDF et extraction d'informations (NLP)
+
+🤖 Génération automatique de questions avec modèle LLM (Mistral via Ollama)
+
+🧪 Évaluation automatisée des tests avec scoring intelligent
+
+📊 Consultation des résultats, classements et statistiques
 
 
 ## Getting started
